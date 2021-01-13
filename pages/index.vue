@@ -4,36 +4,74 @@
       <v-row>
         <v-col cols="12" lg="4" md="5" sm="6">
           <v-text-field
-            v-model="documentName.value"
-            :label="documentName.label"
+            v-model="documentInfo.documentName.value"
+            :label="documentInfo.documentName.label"
             clearable
           ></v-text-field>
           <v-text-field
-            v-model="documentNr.value"
-            :label="documentNr.label"
+            v-model="documentInfo.documentNr.value"
+            :label="documentInfo.documentNr.label"
             clearable
           ></v-text-field>
           <v-text-field
-            v-model="documentDate.value"
-            :label="documentDate.label"
+            v-model="documentInfo.documentDate.value"
+            :label="documentInfo.documentDate.label"
             clearable
           ></v-text-field>
         </v-col>
       </v-row>
       <v-row>
-        <v-col>
-          <v-text-field
-            v-model="seller.value"
-            :label="seller.label"
-            clearable
-          ></v-text-field>
+        <v-col cols="12" lg="6" md="6" sm="6">
+          <h3>Pardavėjas</h3>
+          <div v-for="(input, index) in sellerInfo" :key="index" class="d-flex">
+            <v-text-field
+              v-model="input.value"
+              :label="input.label"
+              clearable
+            ></v-text-field>
+            <v-icon medium @click="deleteSellerInfo(index)"
+              >mdi-delete-outline
+            </v-icon>
+          </div>
+          <div class="d-flex">
+            <v-text-field
+              v-model="sellerInput.label"
+              label="Kategorija"
+              clearable
+            ></v-text-field>
+            <v-text-field
+              v-model="sellerInput.value"
+              label="Tekstas"
+              clearable
+            ></v-text-field>
+            <v-icon medium @click="addSellerInfo">mdi-plus</v-icon>
+          </div>
         </v-col>
-        <v-col>
-          <v-text-field
-            v-model="buyer.value"
-            :label="buyer.label"
-            clearable
-          ></v-text-field>
+        <v-col cols="12" lg="6" md="6" sm="6">
+          <h3>Pirkėjas</h3>
+          <div v-for="(input, index) in buyerInfo" :key="index" class="d-flex">
+            <v-text-field
+              v-model="input.value"
+              :label="input.label"
+              clearable
+            ></v-text-field>
+            <v-icon medium @click="deleteBuyerInfo(index)"
+              >mdi-delete-outline
+            </v-icon>
+          </div>
+          <div class="d-flex">
+            <v-text-field
+              v-model="buyerInput.label"
+              label="Kategorija"
+              clearable
+            ></v-text-field>
+            <v-text-field
+              v-model="buyerInput.value"
+              label="Tekstas"
+              clearable
+            ></v-text-field>
+            <v-icon medium @click="addBuyerInfo">mdi-plus</v-icon>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -44,34 +82,92 @@
 export default {
   data() {
     return {
-      documentName: {
-        value: 'SĄSKAITA FAKTŪRA',
-        label: 'Dokumento pavadinimas',
+      documentInfo: {
+        documentName: {
+          value: 'SĄSKAITA FAKTŪRA',
+          label: 'Dokumento pavadinimas',
+        },
+        documentNr: {
+          value: '',
+          label: 'Serijos Nr.',
+        },
+        documentDate: {
+          value: '',
+          label: 'Data',
+        },
       },
-      documentNr: {
+      sellerInfo: [
+        {
+          value: 'Vardas Pavarde',
+          label: 'Pardavėjas',
+        },
+        {
+          value: 'AB "SwedBank"',
+          label: 'Bankas',
+        },
+        {
+          value: 'LT000000000000000000',
+          label: 'A.s Nr.',
+        },
+      ],
+      sellerInput: {
         value: '',
-        label: 'Serijos Nr.',
+        label: '',
       },
-      documentDate: {
+      buyerInfo: [
+        {
+          value: 'Vardas Pavarde',
+          label: 'Pirkėjas',
+        },
+        {
+          value: '',
+          label: 'In v. nr.',
+        },
+        {
+          value: '',
+          label: 'Tel.',
+        },
+      ],
+      buyerInput: {
         value: '',
-        label: 'Data',
-      },
-      seller: {
-        value: '',
-        label: 'Pardavėjas',
-      },
-
-      buyer: {
-        value: '',
-        label: 'Pirkėjas',
+        label: '',
       },
     }
   },
   mounted() {
     const data = new Date() // today, now
-    this.documentDate.value = data.toISOString().slice(0, 10) // YYYY-MM-DD
-    this.documentNr.value =
+    this.documentInfo.documentDate.value = data.toISOString().slice(0, 10) // YYYY-MM-DD
+    this.documentInfo.documentNr.value =
       'Serija JUV Nr. ' + data.toISOString().slice(0, 10).replaceAll('-', '')
+  },
+  methods: {
+    addSellerInfo() {
+      this.sellerInfo.push(this.sellerInput)
+      this.sellerInput = {
+        value: '',
+        label: '',
+      }
+    },
+    addBuyerInfo() {
+      this.buyerInfo.push(this.buyerInput)
+      this.buyerInput = {
+        value: '',
+        label: '',
+      }
+    },
+    deleteSellerInfo(index) {
+      this.sellerInfo.splice(index, 1)
+    },
+    deleteBuyerInfo(index) {
+      this.buyerInfo.splice(index, 1)
+    },
   },
 }
 </script>
+
+<style lang="scss" scoped>
+d-flex {
+  display: flex;
+  flex-direction: row;
+}
+</style>
