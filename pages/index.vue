@@ -74,12 +74,17 @@
           </div>
         </v-col>
       </v-row>
+      <v-row justify="center">
+        <invoice-table />
+      </v-row>
     </v-container>
   </div>
 </template>
 
 <script>
+import InvoiceTable from '~/components/InvoiceTable.vue'
 export default {
+  components: { InvoiceTable },
   data() {
     return {
       documentInfo: {
